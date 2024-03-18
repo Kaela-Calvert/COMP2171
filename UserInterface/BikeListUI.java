@@ -1,15 +1,13 @@
 package UserInterface;
 
-import Source.LinkBike;
+import Controllers.BikeController;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.util.List;
 
 public class BikeListUI {
     private JFrame frame;
@@ -34,7 +32,7 @@ public class BikeListUI {
         JScrollPane scrollPane = new JScrollPane(bikeTable);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
-        readBikesFromTxt(); // Read and display bikes info
+        loadBikesIntoTable(); // Read and display bikes info
 
         // Buttons panel
         JPanel buttonPanel = new JPanel(new FlowLayout());
@@ -56,23 +54,34 @@ public class BikeListUI {
         linkButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String bikeIDInput = JOptionPane.showInputDialog(null, "Enter Bike ID:");
-                try {
-                    int bikeID = Integer.parseInt(bikeIDInput);
-                    if (LinkBike.linkToBike(bikeID, stationName)) {
-                        readBikesFromTxt(); // Refresh the table
+                if (!BikeController.isUserLinked()) {
+                    String bikeIDInput = JOptionPane.showInputDialog(null, "Enter Bike ID:");
+                    try {
+                        int bikeID = Integer.parseInt(bikeIDInput);
+                        if (BikeController.linkToBike(bikeID, stationName)) {
+                            JOptionPane.showMessageDialog(null, "You are sucessfully linke to: " + BikeController.getLinkedBikeID() );
+                            loadBikesIntoTable(); // Refresh the table
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Invalid Bike ID or bike is not available: " + bikeID);
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "Invalid Bike ID. Please enter a valid ID.");
                     }
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Invalid Bike ID. Please enter a valid ID.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "You are already linked to Bike ID: " + BikeController.getLinkedBikeID() +
+                            ". Please unlink before linking to a new bike.");
                 }
             }
         });
+        
 
         unlinkButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (LinkBike.unlinkFromBike()) {
-                    readBikesFromTxt(); // Refresh the table
+                if (BikeController.unlinkFromBike()) {
+                    loadBikesIntoTable(); // Refresh the table
+                } else {
+                    JOptionPane.showMessageDialog(null, "You are not currently linked to any bike.");
                 }
             }
         });
@@ -84,18 +93,12 @@ public class BikeListUI {
         frame.setVisible(true);
     }
 
-    private void readBikesFromTxt() {
+    private void loadBikesIntoTable() {
         tableModel.setRowCount(0); // Clear previous data from table
-        try (Scanner scanner = new Scanner(new File("TextFiles/bikes.txt"))) {
-            while (scanner.hasNextLine()) {
-                String[] bikeInfo = scanner.nextLine().split("_");
-                if (bikeInfo[1].equalsIgnoreCase(stationName)) {
-                    tableModel.addRow(new Object[]{bikeInfo[0], bikeInfo[1], bikeInfo[2], bikeInfo[3], bikeInfo[4],
-                            bikeInfo[5], bikeInfo[6]});
-                }
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        List<BikeController.BikeData> bikes = BikeController.getBikesForStation(stationName);
+        for (BikeController.BikeData bike : bikes) {
+            tableModel.addRow(new Object[]{bike.getBikeID(), bike.getLocation(), bike.getUserRating(), bike.getCondition(),
+                    bike.getAvailability(), bike.getPrice(), bike.getLateFee()});
         }
     }
 

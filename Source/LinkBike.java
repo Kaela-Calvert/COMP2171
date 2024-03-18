@@ -100,4 +100,24 @@ public class LinkBike {
             e.printStackTrace();
         }
     }
+
+    public static boolean updateAndLinkBike(int bikeID, String station) {
+        // Check if there's already a linked bike
+        if (linkedBikeID != -1) {
+            JOptionPane.showMessageDialog(null, "You are already linked to Bike ID: " + linkedBikeID +
+                    ". Please unlink before linking to a new bike.");
+            return false;
+        }
+
+        // Add logic to verify bike ID (e.g., check if it exists in the system and is available)
+        if (isValidBikeID(bikeID) && checkAvailability(bikeID).equals("Available")) {
+            linkedBikeID = bikeID;
+            updateBikeAvailability(bikeID, "NotAvailable"); // Set bike availability to false
+            JOptionPane.showMessageDialog(null, "Successfully linked to Bike ID: " + linkedBikeID);
+            return true;
+        } else {
+            JOptionPane.showMessageDialog(null, "Invalid Bike ID or bike is not available: " + bikeID);
+            return false;
+        }
+    }
 }
