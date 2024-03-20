@@ -1,7 +1,6 @@
 package Controllers;
 
 import Source.LinkBike;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -16,7 +15,11 @@ public class BikeController {
     }
 
     public static boolean linkToBike(int bikeID, String station) {
-        if (!isUserLinked() && isValidBikeID(bikeID) && checkAvailability(bikeID).equals("Available")) {
+        if (linkedBikeID != -1) {
+            return false;
+        }
+
+        if (isValidBikeID(bikeID) && checkAvailability(bikeID).equals("Available")) {
             linkedBikeID = bikeID;
             LinkBike.updateBikeAvailability(bikeID, "NotAvailable");
             return true;
@@ -26,17 +29,13 @@ public class BikeController {
     }
 
     public static boolean unlinkFromBike() {
-        if (isUserLinked()) {
+        if (linkedBikeID == -1) {
+            return false;
+        } else {
             LinkBike.updateBikeAvailability(linkedBikeID, "Available");
             linkedBikeID = -1;
             return true;
-        } else {
-            return false;
         }
-    }
-
-    public static boolean isUserLinked() {
-        return linkedBikeID != -1;
     }
 
     public static boolean isValidBikeID(int bikeID) {
@@ -60,6 +59,20 @@ public class BikeController {
             e.printStackTrace();
         }
         return bikes;
+    }
+
+    public static boolean updateAndLinkBike(int bikeID, String station) {
+        if (linkedBikeID != -1) {
+            return false;
+        }
+
+        if (isValidBikeID(bikeID) && checkAvailability(bikeID).equals("Available")) {
+            linkedBikeID = bikeID;
+            LinkBike.updateBikeAvailability(bikeID, "NotAvailable");
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static class BikeData {

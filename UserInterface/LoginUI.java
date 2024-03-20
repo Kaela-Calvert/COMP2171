@@ -1,6 +1,6 @@
 package UserInterface;
 
-import Security.Authentication;
+import Controllers.AuthenticationController;
 import Source.Admin;
 import Source.User;
 
@@ -16,21 +16,14 @@ import javax.imageio.ImageIO;
 public class LoginUI extends JFrame {
     private JPanel mainPanel;
     private JPanel imgPanel = new JPanel();
-    static String id;
-
     private JTextField idText = new JTextField(20);
     private JPasswordField passwordText = new JPasswordField(20);
     private JLabel passwordLabel = new JLabel("Password: ");
     private JLabel idLabel = new JLabel("ID:");
-
     private JButton loginButton;
     private JButton signUpButton;
     private JCheckBox adminCheckBox = new JCheckBox("Administrator");
-    private static ArrayList<User> users = new ArrayList<>();
-    private ArrayList<Admin> admins = new ArrayList<>();
-    public static final String file = "TextFiles/userdata.txt";
-    public static final String emailFile = "TextFiles/emaildata.txt";
-    ArrayList<String> idEmailList = new ArrayList<String>();
+    private AuthenticationController authController;
 
     public LoginUI() {
         try {
@@ -117,7 +110,7 @@ public class LoginUI extends JFrame {
 
         setVisible(true);
 
-        // readFile(file);
+        authController = new AuthenticationController();
     }
 
     private class LoginListener implements ActionListener {
@@ -126,8 +119,7 @@ public class LoginUI extends JFrame {
             String password = new String(passwordText.getPassword());
             boolean isAdmin = adminCheckBox.isSelected();
 
-            Authentication auth = new Authentication();
-            boolean isAuthenticated = auth.authenticate(id, password, isAdmin);
+            boolean isAuthenticated = authController.authenticateUser(id, password, isAdmin);
 
             if (isAuthenticated) {
                 if (isAdmin) {
@@ -152,7 +144,10 @@ public class LoginUI extends JFrame {
 
     private class SignUpListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            // Sign up logic
+            // Open sign-up screen
+            // dispose();
+            // SignUpUI signUpUI = new SignUpUI(authController);
+            // signUpUI.setVisible(true);
         }
     }
 }

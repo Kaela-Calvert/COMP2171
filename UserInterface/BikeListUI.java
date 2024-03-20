@@ -1,25 +1,26 @@
 package UserInterface;
 
 import Controllers.BikeController;
+import Controllers.PaymentController;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class BikeListUI {
     private JFrame frame;
     private DefaultTableModel tableModel;
     private String stationName;
+    private JTable bikeTable; // Added JTable instance for access in methods
 
     public BikeListUI(String stationName, JFrame parentFrame) {
         this.stationName = stationName;
         frame = new JFrame("Bike List - " + stationName);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(600, 400);
-        frame.setLocationRelativeTo(null);
+        frame.setSize(800, 600); // Set a fixed size for the frame
 
         // Main panel to hold table and buttons
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -28,7 +29,7 @@ public class BikeListUI {
         // Table setup
         String[] columns = {"Bicycle ID", "Location", "User Rating", "Condition", "Availability", "Price", "Late Fee"};
         tableModel = new DefaultTableModel(columns, 0);
-        JTable bikeTable = new JTable(tableModel);
+        bikeTable = new JTable(tableModel); // Initialize the JTable
         JScrollPane scrollPane = new JScrollPane(bikeTable);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
@@ -54,42 +55,95 @@ public class BikeListUI {
         linkButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!BikeController.isUserLinked()) {
-                    String bikeIDInput = JOptionPane.showInputDialog(null, "Enter Bike ID:");
-                    try {
-                        int bikeID = Integer.parseInt(bikeIDInput);
-                        if (BikeController.linkToBike(bikeID, stationName)) {
-                            JOptionPane.showMessageDialog(null, "You are sucessfully linke to: " + BikeController.getLinkedBikeID() );
-                            loadBikesIntoTable(); // Refresh the table
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Invalid Bike ID or bike is not available: " + bikeID);
+                // Prompt the user to enter their ID number
+                String idInput = JOptionPane.showInputDialog(null, "Enter your ID number:");
+        
+                // Check if the user entered an ID number
+                if (idInput != null && !idInput.isEmpty()) {
+                    String idnum = idInput.trim(); // Trim any leading or trailing whitespace
+        
+                    // Check if the user has a payment plan
+                    boolean hasPaymentPlan = PaymentController.checkPaymentPlan(idnum);
+                    if (hasPaymentPlan) {
+                        if (BikeController.getLinkedBikeID() != -1) {
+                            int choice = JOptionPane.showConfirmDialog(null, "You are already linked to a bike. Do you want to unlink the current bike?", "Confirm Unlink", JOptionPane.YES_NO_OPTION);
+                            if (choice == JOptionPane.YES_OPTION) {
+                                boolean unlinked = BikeController.unlinkFromBike();
+                                if (unlinked) {
+                                    JOptionPane.showMessageDialog(null, "Current bike unlinked successfully.");
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Failed to unlink the current bike.", "Error", JOptionPane.ERROR_MESSAGE);
+                                    return; // Exit the action listener if unlink failed
+                                }
+                            } else {
+                                return; // Exit the action listener if the user doesn't want to unlink
+                            }
                         }
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(null, "Invalid Bike ID. Please enter a valid ID.");
+        
+                        // Prompt the user to enter the bike ID
+                        String bikeIdInput = JOptionPane.showInputDialog(null, "Enter the bike ID you want to link:");
+        
+                        if (bikeIdInput != null && !bikeIdInput.isEmpty()) {
+                            try {
+                                int bikeId = Integer.parseInt(bikeIdInput.trim()); // Parse the bike ID as an integer
+        
+                                // Get rental duration from the user
+                                String durationInput = JOptionPane.showInputDialog(null, "Enter the rental duration in hours:");
+        
+                                if (durationInput != null && !durationInput.isEmpty()) {
+                                    try {
+                                        int rentalHours = Integer.parseInt(durationInput.trim()); // Parse rental hours as an integer
+        
+                                        // Hide the BikeListUI
+                                        frame.dispose();
+        
+                                        // Proceed with linking the bike
+                                        boolean linked = BikeController.linkToBike(bikeId, stationName);
+                                        if (linked) {
+                                            // Get current time for rental invoice
+                                            LocalDateTime startTime = LocalDateTime.now();
+                                            LocalDateTime endTime = startTime.plusHours(rentalHours); // Set rental end time based on user input
+        
+                                            // Display rental invoice
+                                            RentalInvoiceUI invoiceUI = new RentalInvoiceUI(idnum, startTime, endTime);
+                                            invoiceUI.setVisible(true);
+        
+                                            JOptionPane.showMessageDialog(null, "Bike linked successfully.");
+                                            loadBikesIntoTable(); // Refresh the table after linking
+                                        } else {
+                                            JOptionPane.showMessageDialog(null, "Failed to link bike.", "Error", JOptionPane.ERROR_MESSAGE);
+                                        }
+                                    } catch (NumberFormatException ex) {
+                                        JOptionPane.showMessageDialog(null, "Invalid rental duration. Please enter an integer.", "Error", JOptionPane.ERROR_MESSAGE);
+                                    }
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Please enter a valid rental duration.", "Error", JOptionPane.ERROR_MESSAGE);
+                                }
+                            } catch (NumberFormatException ex) {
+                                JOptionPane.showMessageDialog(null, "Invalid bike ID. Please enter an integer.", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Please enter a valid bike ID.", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "You must have a payment plan before linking a bike.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "You are already linked to Bike ID: " + BikeController.getLinkedBikeID() +
-                            ". Please unlink before linking to a new bike.");
+                    JOptionPane.showMessageDialog(null, "Please enter a valid ID number.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
         
 
-        unlinkButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (BikeController.unlinkFromBike()) {
-                    loadBikesIntoTable(); // Refresh the table
-                } else {
-                    JOptionPane.showMessageDialog(null, "You are not currently linked to any bike.");
-                }
-            }
-        });
+        
 
         buttonPanel.add(returnButton);
         buttonPanel.add(linkButton);
         buttonPanel.add(unlinkButton);
 
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Close the application on frame close
+        frame.setLocationRelativeTo(null); // Center the frame on the screen
+        frame.setResizable(false); // Disable frame resizing
         frame.setVisible(true);
     }
 

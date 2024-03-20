@@ -1,9 +1,15 @@
 package UserInterface;
 
 import javax.swing.*;
+
+import Controllers.PaymentController;
+import UserInterface.TermsAndConditionsUI;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -93,19 +99,42 @@ public class MainPage extends JFrame {
     private class AddPaymentPlanListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             // Create an instance of AddPaymentPlan class from Source package
-            // Source.AddPaymentPlan addPaymentPlan = new Source.AddPaymentPlan();
+            dispose();
+            PaymentController controller = new PaymentController();
+            UserInterface.PaymentPlanUI addPaymentPlan = new UserInterface.PaymentPlanUI(controller);
             // Perform any additional actions as needed
         }
     }
 
-    private class SelectBikeListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            // Create an instance of SelectBike class from Source package
-            dispose();
-            UserInterface.SelectBikeUI selectBike = new UserInterface.SelectBikeUI ();
-            // Perform any additional actions as needed
-        }
+    
+private class SelectBikeListener implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
+        dispose();
+        // Show the Terms and Conditions UI
+        TermsAndConditionsUI termsAndConditionsUI = new TermsAndConditionsUI();
+        termsAndConditionsUI.setVisible(true);
+
+        // Add a window listener to wait for the user to accept the terms
+        termsAndConditionsUI.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                // Proceed with selecting the bike only if the user accepted the terms
+                // if (TermsAndConditionsUI.isAccepted()) {
+                    boolean truth = true;
+                if (truth) {
+                    // Create an instance of SelectBikeUI class and show it
+                    SelectBikeUI selectBike = new SelectBikeUI();
+                    selectBike.setVisible(true);
+                } else {
+                    // Optionally, handle the case where the user did not accept the terms
+                    // For example, display a message or take appropriate action
+                    JOptionPane.showMessageDialog(null, "You must accept the terms and conditions to proceed.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
     }
+}
+    
 
     private class RateExperienceListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {

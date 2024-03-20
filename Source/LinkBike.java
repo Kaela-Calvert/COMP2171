@@ -1,18 +1,24 @@
 package Source;
 
+import javax.swing.*;
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
-
-import javax.swing.JOptionPane;
 
 public class LinkBike {
     private static int linkedBikeID = -1; // Initialize as -1 to indicate no linked bike initially
+    private static User currentUser; // Add a reference to the current user
 
-    public static boolean linkToBike(int bikeID, String station) {
-        // Check if there's already a linked bike
+    public static boolean linkToBike(int bikeID, String station, User user) {
+        // Check if the user has a payment plan
+        if (!user.hasPaymentPlan()) {
+            JOptionPane.showMessageDialog(null, "You must have a payment plan before linking a bike.");
+            return false;
+        }
+
+        // Check if the user is already linked to a bike
         if (linkedBikeID != -1) {
             JOptionPane.showMessageDialog(null, "You are already linked to Bike ID: " + linkedBikeID +
                     ". Please unlink before linking to a new bike.");
@@ -44,43 +50,43 @@ public class LinkBike {
     }
 
     public static boolean isValidBikeID(int bikeID) {
-        try (Scanner scanner = new Scanner(new File("TextFiles/bikes.txt"))) {
-            while (scanner.hasNextLine()) {
-                String[] bikeInfo = scanner.nextLine().split("_");
+        try (BufferedReader br = new BufferedReader(new FileReader("TextFiles/bikes.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] bikeInfo = line.split("_");
                 int currentID = Integer.parseInt(bikeInfo[0]);
                 if (currentID == bikeID) {
                     return true; // Bike ID found
                 }
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace(); // Handle file reading or parsing errors
         }
         return false; // Bike ID not found
     }
 
     public static String checkAvailability(int bikeID) {
-        try (Scanner scanner = new Scanner(new File("TextFiles/bikes.txt"))) {
-            while (scanner.hasNextLine()) {
-                String[] bikeInfo = scanner.nextLine().split("_");
+        try (BufferedReader br = new BufferedReader(new FileReader("TextFiles/bikes.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] bikeInfo = line.split("_");
                 int currentID = Integer.parseInt(bikeInfo[0]);
                 if (currentID == bikeID) {
                     return bikeInfo[4]; // Return availability status
                 }
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace(); // Handle file reading or parsing errors
         }
         return null; // Bike ID not found or file not found
     }
 
     public static void updateBikeAvailability(int bikeID, String isAvailable) {
         // Update the availability of the bike in bikes.txt file
-        try {
-            File bikesFile = new File("TextFiles/bikes.txt");
-            Scanner scanner = new Scanner(bikesFile);
+        try (BufferedReader br = new BufferedReader(new FileReader("TextFiles/bikes.txt"))) {
             StringBuilder updatedContent = new StringBuilder();
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
+            String line;
+            while ((line = br.readLine()) != null) {
                 String[] bikeInfo = line.split("_");
                 int currentID = Integer.parseInt(bikeInfo[0]);
                 if (currentID == bikeID) {
@@ -91,33 +97,35 @@ public class LinkBike {
                     updatedContent.append(line).append("\n");
                 }
             }
-            scanner.close();
 
-            FileWriter writer = new FileWriter(bikesFile);
-            writer.write(updatedContent.toString());
-            writer.close();
+            try (FileWriter writer = new FileWriter("TextFiles/bikes.txt")) {
+                writer.write(updatedContent.toString());
+            } catch (IOException e) {
+                e.printStackTrace(); // Handle file writing errors
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Handle file reading errors
         }
     }
 
-    public static boolean updateAndLinkBike(int bikeID, String station) {
-        // Check if there's already a linked bike
-        if (linkedBikeID != -1) {
-            JOptionPane.showMessageDialog(null, "You are already linked to Bike ID: " + linkedBikeID +
-                    ". Please unlink before linking to a new bike.");
-            return false;
-        }
+    public static void setCurrentUser(User user) {
+        currentUser = user;
+    }
 
-        // Add logic to verify bike ID (e.g., check if it exists in the system and is available)
-        if (isValidBikeID(bikeID) && checkAvailability(bikeID).equals("Available")) {
-            linkedBikeID = bikeID;
-            updateBikeAvailability(bikeID, "NotAvailable"); // Set bike availability to false
-            JOptionPane.showMessageDialog(null, "Successfully linked to Bike ID: " + linkedBikeID);
-            return true;
-        } else {
-            JOptionPane.showMessageDialog(null, "Invalid Bike ID or bike is not available: " + bikeID);
-            return false;
+    public static int getLinkedBikeID() {
+        int bikeID = 0; // Default value if no linked bike ID is found
+        try (BufferedReader br = new BufferedReader(new FileReader("TextFiles/bikes.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] bikeData = line.split("_");
+                if (bikeData.length >= 5 && bikeData[4].equalsIgnoreCase("NotAvailable")) {
+                    bikeID = Integer.parseInt(bikeData[0]);
+                    break; // Stop searching once a linked bike ID is found
+                }
+            }
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace(); // Handle file reading or parsing errors
         }
+        return bikeID;
     }
 }
