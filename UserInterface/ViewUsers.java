@@ -3,6 +3,7 @@ package UserInterface;
 import javax.swing.*;
 
 import Source.User;
+// import Controller.UserController;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -79,4 +80,4 @@ public class ViewUsers extends JFrame {
             // Delete user logic
         }
     }
-}c
+}
