@@ -85,16 +85,16 @@ public class LoginUI extends JFrame {
         loginButton.setPreferredSize(new Dimension(300, 50));
         mainPanel.add(loginButton, gbc);
 
-        gbc.gridy = 4;
-        signUpButton = new JButton("Sign Up");
-        signUpButton.setBackground(new Color(51, 153, 102));
-        signUpButton.setForeground(Color.WHITE);
-        signUpButton.setFont(new Font("Arial", Font.BOLD, 18));
-        signUpButton.setPreferredSize(new Dimension(300, 50));
-        mainPanel.add(signUpButton, gbc);
+        // gbc.gridy = 4;
+        // signUpButton = new JButton("Sign Up");
+        // signUpButton.setBackground(new Color(51, 153, 102));
+        // signUpButton.setForeground(Color.WHITE);
+        // signUpButton.setFont(new Font("Arial", Font.BOLD, 18));
+        // signUpButton.setPreferredSize(new Dimension(300, 50));
+        // mainPanel.add(signUpButton, gbc);
 
         loginButton.addActionListener(new LoginListener());
-        signUpButton.addActionListener(new SignUpListener());
+        // signUpButton.addActionListener(new SignUpListener());
 
         BufferedImage myPicture = null;
         try {
