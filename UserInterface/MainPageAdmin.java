@@ -4,42 +4,101 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class MainPageAdmin extends JFrame {
-    private JLabel header = new JLabel("UWI ON WHEELS");
-    private JPanel mainScreenPanel = new JPanel();
-    private JButton viewUsers = new JButton("VIEW USERS");
-    private JButton deleteUsers = new JButton("DELETE USERS");
-    private JButton logout = new JButton("LOGOUT");
+    private JPanel mainPanel;
+    private JPanel buttonsPanel;
+    private JButton viewUsersButton;
+    private JButton deleteUsersButton;
+    private JButton logoutButton;
+    private JPanel imgPanel;
 
     public MainPageAdmin() {
-        setTitle("MainScreen");
-        setBounds(300, 90, 420, 700);
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            ex.printStackTrace();
+        }
+
+        setTitle("Admin Main Menu");
+        setBounds(300, 90, 800, 600);
         setResizable(false);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
 
-        header.setFont(new Font("TIMES NEW ROMAN", Font.BOLD, 20));
-        header.setBounds(120, 20, 200, 30);
-        mainScreenPanel.add(header);
+        mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+        mainPanel.setBackground(Color.BLUE); // Set the same background color as buttonsPanel
+        add(mainPanel, BorderLayout.CENTER);
 
-        add(mainScreenPanel);
-        mainScreenPanel.setLayout(null);
-        mainScreenPanel.setBackground(Color.GREEN);
+        // Image panel setup
+        imgPanel = new JPanel();
+        BufferedImage myPicture = null;
+        try {
+            myPicture = ImageIO.read(new File("Images/Admin.jpg"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+        Dimension size = new Dimension(400, 400);
+        picLabel.setPreferredSize(size);
+        imgPanel.add(picLabel);
+        imgPanel.setBackground(new Color(51, 102, 153));
+        mainPanel.add(imgPanel, BorderLayout.NORTH);
 
-        viewUsers.setBounds(110, 300, 200, 35);
-        deleteUsers.setBounds(110, 400, 200, 35);
-        logout.setBounds(110, 500, 200, 35);
+        // Buttons panel setup
+        buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        buttonsPanel.setBackground(new Color(51, 102, 153));
 
-        mainScreenPanel.add(viewUsers);
-        mainScreenPanel.add(deleteUsers);
-        mainScreenPanel.add(logout);
+        viewUsersButton = new JButton("VIEW USERS");
+        deleteUsersButton = new JButton("DELETE USERS");
+        logoutButton = new JButton("LOGOUT");
+
+        // Set the same background color as the login button (assuming it's a blue color)
+        viewUsersButton.setBackground(new Color(51, 153, 102));
+        viewUsersButton.setForeground(Color.WHITE);
+        deleteUsersButton.setBackground(new Color(51, 153, 102));
+        deleteUsersButton.setForeground(Color.WHITE);
+        logoutButton.setBackground(new Color(51, 153, 102));
+        logoutButton.setForeground(Color.WHITE);
+
+        viewUsersButton.setPreferredSize(new Dimension(200, 45));
+        deleteUsersButton.setPreferredSize(new Dimension(200, 45));
+        logoutButton.setPreferredSize(new Dimension(200, 45));
+
+        buttonsPanel.add(viewUsersButton);
+        buttonsPanel.add(deleteUsersButton);
+        buttonsPanel.add(logoutButton);
+
+        mainPanel.add(buttonsPanel, BorderLayout.CENTER);
 
         // Button listeners
-        viewUsers.addActionListener(new ViewUserListener());
-        logout.addActionListener(new LogoutAdminListener());
-        deleteUsers.addActionListener(new DeleteListener());
+        viewUsersButton.addActionListener(new ViewUserListener());
+        deleteUsersButton.addActionListener(new DeleteListener());
+        logoutButton.addActionListener(new LogoutAdminListener());
 
         setVisible(true);
+    }
+
+    private class ViewUserListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            try {
+                dispose();
+                ViewUsers view = new ViewUsers();
+            } catch (NullPointerException nulP) {
+                // Handle NullPointerException if needed
+            }
+        }
+    }
+
+    private class DeleteListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            // Delete user logic
+        }
     }
 
     private class LogoutAdminListener implements ActionListener {
@@ -49,19 +108,9 @@ public class MainPageAdmin extends JFrame {
         }
     }
 
-    private class ViewUserListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            try {
-                dispose();
-                ViewUsers view = new ViewUsers();
-            } catch (NullPointerException nulP) {
-            }
-        }
-    }
-
-    private class DeleteListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            // Delete user logic
-        }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new MainPageAdmin().setVisible(true);
+        });
     }
 }
