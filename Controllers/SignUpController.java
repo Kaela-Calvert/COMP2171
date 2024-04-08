@@ -85,20 +85,21 @@ public class SignUpController {
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
-
+        props.put("mail.smtp.ssl.trust", "*"); 
+    
         Session session = Session.getInstance(props, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(EMAIL_USERNAME, EMAIL_PASSWORD);
             }
         });
-
+    
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(EMAIL_USERNAME));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
             message.setSubject("Verification Code");
             message.setText("Your verification code is: " + verificationCode);
-
+    
             Transport.send(message);
             return true;
         } catch (MessagingException e) {
@@ -106,4 +107,5 @@ public class SignUpController {
             return false;
         }
     }
+    
 }

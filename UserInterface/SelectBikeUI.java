@@ -42,7 +42,7 @@ public class SelectBikeUI extends JFrame {
 
         // Buttons setup
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
-        buttonPanel.setBackground(Color.LIGHT_GRAY);
+        buttonPanel.setBackground(new Color(51, 102, 153));
 
         JButton studentUnionButton = new JButton("Student Union");
         JButton scitechButton = new JButton("SciTech");
@@ -53,12 +53,26 @@ public class SelectBikeUI extends JFrame {
         JButton backButton = new JButton("Back");
 
         studentUnionButton.setPreferredSize(new Dimension(180, 40));
+        studentUnionButton.setBackground(new Color(51, 153, 102));
+        studentUnionButton.setForeground(Color.WHITE);
         scitechButton.setPreferredSize(new Dimension(180, 40));
+        scitechButton.setBackground(new Color(51, 153, 102));
+        scitechButton.setForeground(Color.WHITE);
         medSciButton.setPreferredSize(new Dimension(180, 40));
+        medSciButton.setBackground(new Color(51, 153, 102));
+        medSciButton.setForeground(Color.WHITE);
         humanitiesButton.setPreferredSize(new Dimension(180, 40));
+        humanitiesButton.setBackground(new Color(51, 153, 102));
+        humanitiesButton.setForeground(Color.WHITE);
         socialScienceButton.setPreferredSize(new Dimension(180, 40));
+        socialScienceButton.setBackground(new Color(51, 153, 102));
+        socialScienceButton.setForeground(Color.WHITE);
         backGateButton.setPreferredSize(new Dimension(180, 40));
+        backGateButton.setBackground(new Color(51, 153, 102));
+        backGateButton.setForeground(Color.WHITE);
         backButton.setPreferredSize(new Dimension(180, 40));
+        backButton.setBackground(new Color(51, 153, 102));
+        backButton.setForeground(Color.WHITE);
 
         buttonPanel.add(studentUnionButton);
         buttonPanel.add(scitechButton);

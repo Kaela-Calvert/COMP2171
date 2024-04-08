@@ -33,7 +33,7 @@ public class MainPage extends JFrame {
 
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
-        mainPanel.setBackground(new Color(240, 240, 240));
+        mainPanel.setBackground(new Color(51, 102, 153));
         add(mainPanel, BorderLayout.CENTER);
 
         // Image panel setup
@@ -51,23 +51,35 @@ public class MainPage extends JFrame {
 
         // Buttons panel setup
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
-        buttonsPanel.setBackground(Color.LIGHT_GRAY);
+        buttonsPanel.setBackground(new Color(51, 102, 153));
 
-        JButton rentBikeButton = new JButton("Rent Bike");
+        JButton cancelsupscriptionButton = new JButton("Cancel Subscription");
         JButton addPaymentPlanButton = new JButton("Add Payment Plan");
         JButton selectBikeButton = new JButton("Select Bike");
         JButton rateExperienceButton = new JButton("Rate Experience");
         JButton generateReportButton = new JButton("Generate Report");
         JButton logoutButton = new JButton("Logout");
 
-        rentBikeButton.setPreferredSize(new Dimension(180, 40));
+        cancelsupscriptionButton.setPreferredSize(new Dimension(180, 40));
+        cancelsupscriptionButton.setBackground(new Color(51, 153, 102));
+        cancelsupscriptionButton.setForeground(Color.WHITE);
         addPaymentPlanButton.setPreferredSize(new Dimension(180, 40));
+        addPaymentPlanButton.setBackground(new Color(51, 153, 102));
+        addPaymentPlanButton.setForeground(Color.WHITE);
         selectBikeButton.setPreferredSize(new Dimension(180, 40));
+        selectBikeButton.setBackground(new Color(51, 153, 102));
+        selectBikeButton.setForeground(Color.WHITE);
         rateExperienceButton.setPreferredSize(new Dimension(180, 40));
+        rateExperienceButton.setBackground(new Color(51, 153, 102));
+        rateExperienceButton.setForeground(Color.WHITE);
         generateReportButton.setPreferredSize(new Dimension(180, 40));
+        generateReportButton.setBackground(new Color(51, 153, 102));
+        generateReportButton.setForeground(Color.WHITE);
         logoutButton.setPreferredSize(new Dimension(180, 40));
+        logoutButton.setBackground(new Color(51, 153, 102));
+        logoutButton.setForeground(Color.WHITE);
 
-        buttonsPanel.add(rentBikeButton);
+        buttonsPanel.add(cancelsupscriptionButton);
         buttonsPanel.add(addPaymentPlanButton);
         buttonsPanel.add(selectBikeButton);
         buttonsPanel.add(rateExperienceButton);
@@ -77,7 +89,7 @@ public class MainPage extends JFrame {
         mainPanel.add(buttonsPanel);
 
         // Button listeners
-        rentBikeButton.addActionListener(new RentBikeListener());
+        cancelsupscriptionButton.addActionListener(new CancelsupscriptionListener());
         addPaymentPlanButton.addActionListener(new AddPaymentPlanListener());
         selectBikeButton.addActionListener(new SelectBikeListener());
         rateExperienceButton.addActionListener(new RateExperienceListener());
@@ -88,11 +100,11 @@ public class MainPage extends JFrame {
     }
 
     // Action listeners for buttons
-    private class RentBikeListener implements ActionListener {
+    private class CancelsupscriptionListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            // Create an instance of RentBike class from Source package
-            // Source.RentBike rentBike = new Source.RentBike();
-            // Perform any additional actions as needed
+            dispose();
+            CancelUI cancelpayment = new CancelUI();
+            
         }
     }
 
@@ -138,23 +150,22 @@ private class SelectBikeListener implements ActionListener {
 
     private class RateExperienceListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            // Create an instance of RateExperience class from Source package
-            // Source.RateExperience rateExperience = new Source.RateExperience();
-            // Perform any additional actions as needed
+            dispose();
+            RateBikeUI rate = new RateBikeUI();
+            
         }
     }
 
     private class GenerateReportListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            // Create an instance of GenerateReport class from Source package
-            // Source.GenerateReport generateReport = new Source.GenerateReport();
-            // Perform any additional actions as needed
+            dispose();
+            ReportUI generateReport = new ReportUI();
+           
         }
     }
 
     private class LogoutListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            // Handle logout action, e.g., close the application or go back to the login screen
             dispose(); // Close the current window
         }
     }

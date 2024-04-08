@@ -24,7 +24,7 @@ public class WelcomeUI extends JFrame {
         setLocationRelativeTo(null);
 
         // Set the background color of the frame
-        getContentPane().setBackground(new Color(51, 102, 153));
+        getContentPane().setBackground(new Color(240, 240, 240));
 
         // Create the main panel with BorderLayout
         mainPanel = new JPanel();
@@ -40,7 +40,7 @@ public class WelcomeUI extends JFrame {
         loginButton = new JButton("Login");
         loginButton.setFont(new Font("Arial", Font.BOLD, 18));
         loginButton.setForeground(Color.WHITE);
-        loginButton.setBackground(Color.orange);
+        loginButton.setBackground(new Color(51, 153, 102));
         loginButton.setPreferredSize(new Dimension(300, 50));
         loginButton.setBorderPainted(false);
         loginButton.setFocusPainted(false);
@@ -60,7 +60,7 @@ public class WelcomeUI extends JFrame {
         signUpButton = new JButton("Sign Up");
         signUpButton.setFont(new Font("Arial", Font.BOLD, 18));
         signUpButton.setForeground(Color.WHITE);
-        signUpButton.setBackground(Color.ORANGE);
+        signUpButton.setBackground(new Color(51, 153, 102));
         signUpButton.setPreferredSize(new Dimension(300, 50));
         signUpButton.setBorderPainted(false);
         signUpButton.setFocusPainted(false);
@@ -78,7 +78,7 @@ public class WelcomeUI extends JFrame {
 
         // Create a panel for the image and welcome message
         JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBackground(new Color(51, 153, 255));
+        topPanel.setBackground(new Color(51, 102, 153));
         mainPanel.add(topPanel, BorderLayout.CENTER);
 
         // Add the welcome message
@@ -89,7 +89,7 @@ public class WelcomeUI extends JFrame {
 
         // Create a panel for the image
         imgPanel = new JPanel();
-        imgPanel.setBackground(new Color(51, 153, 255));
+        imgPanel.setBackground(new Color(51, 102, 153));
         topPanel.add(imgPanel, BorderLayout.CENTER);
 
         try {

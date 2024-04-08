@@ -14,6 +14,7 @@ public class SignUpUI extends JFrame {
     private JTextField emailText;
     private JPasswordField passwordText;
     private JButton signUpButton;
+    private JButton backButton;
    
 
     public SignUpUI() {
@@ -118,11 +119,28 @@ public class SignUpUI extends JFrame {
         signUpButton.setPreferredSize(new Dimension(300, 50));
         mainPanel.add(signUpButton, gbc);
 
+        // Adjust the grid y-coordinate for the backButton to position it below the signUpButton
+        gbc.gridy = 6;
+        backButton = new JButton("Back");
+        backButton.setBackground(new Color(51, 153, 102));
+        backButton.setForeground(Color.WHITE);
+        backButton.setFont(new Font("Arial", Font.BOLD, 18));
+        backButton.setPreferredSize(new Dimension(300, 50));
+        mainPanel.add(backButton, gbc);
+
+
         signUpButton.addActionListener(new SignUpListener());
+        backButton.addActionListener(new BackListener());
 
         setVisible(true);
     }
 
+    private class BackListener implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+            dispose();
+            new WelcomeUI().setVisible(true);
+        }
+    }
     private class SignUpListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String firstName = firstNameText.getText();

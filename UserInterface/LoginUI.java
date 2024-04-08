@@ -21,7 +21,7 @@ public class LoginUI extends JFrame {
     private JLabel passwordLabel = new JLabel("Password: ");
     private JLabel idLabel = new JLabel("ID:");
     private JButton loginButton;
-    private JButton signUpButton;
+    private JButton backButton;
     private JCheckBox adminCheckBox = new JCheckBox("Administrator");
     private AuthenticationController authController;
 
@@ -85,16 +85,17 @@ public class LoginUI extends JFrame {
         loginButton.setPreferredSize(new Dimension(300, 50));
         mainPanel.add(loginButton, gbc);
 
-        // gbc.gridy = 4;
-        // signUpButton = new JButton("Sign Up");
-        // signUpButton.setBackground(new Color(51, 153, 102));
-        // signUpButton.setForeground(Color.WHITE);
-        // signUpButton.setFont(new Font("Arial", Font.BOLD, 18));
-        // signUpButton.setPreferredSize(new Dimension(300, 50));
-        // mainPanel.add(signUpButton, gbc);
+        gbc.gridy = 4;
+        backButton = new JButton("Back");
+        backButton.setBackground(new Color(51, 153, 102));
+        backButton.setForeground(Color.WHITE);
+        backButton.setFont(new Font("Arial", Font.BOLD, 18));
+        backButton.setPreferredSize(new Dimension(300, 50));
+        mainPanel.add(backButton, gbc);
 
+        backButton.addActionListener(new BackListener());
         loginButton.addActionListener(new LoginListener());
-        // signUpButton.addActionListener(new SignUpListener());
+        
 
         BufferedImage myPicture = null;
         try {
@@ -142,12 +143,10 @@ public class LoginUI extends JFrame {
         }
     }
 
-    private class SignUpListener implements ActionListener {
+    private class BackListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            // Open sign-up screen
-            // dispose();
-            // SignUpUI signUpUI = new SignUpUI(authController);
-            // signUpUI.setVisible(true);
+            dispose();
+            new WelcomeUI().setVisible(true);
         }
     }
 }

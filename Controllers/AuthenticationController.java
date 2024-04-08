@@ -39,7 +39,7 @@ public class AuthenticationController {
 
     public boolean isUserExists(String id) {
         for (User user : users) {
-            if (user.getId().equals(id)) {
+            if (user.getid().equals(id)) {
                 return true;
             }
         }
@@ -60,12 +60,12 @@ public class AuthenticationController {
         return token.equals(verificationToken);
     }
 
-    public User createUser(String id) {
-        // Implement your logic to create a new user with the provided ID
-        User newUser = new User(id, generatePassword());
-        users.add(newUser);
-        return newUser;
-    }
+    // public User createUser(String id) {
+    //     // Implement your logic to create a new user with the provided ID
+    //     User newUser = new User(id, generatePassword());
+    //     users.add(newUser);
+    //     return newUser;
+    // }
 
     // public boolean authenticateUser(String id, String password, boolean isAdmin) {
     //     // Implement your logic to authenticate the user with the provided credentials
