@@ -20,9 +20,6 @@ public class RateBikeController {
             // Add rating to rates.txt file
             addRatingToRatesFile(bikeID, rating, desc);
 
-            // Update bike's current rate in bikes.txt file
-            updateBikeRate(bikeID, Double.parseDouble(rating));
-
             return true;
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
@@ -47,70 +44,39 @@ public class RateBikeController {
     private void addRatingToRatesFile(String bikeID, String rating, String desc) throws IOException {
         double currentRate = getBikeRate(bikeID);
         double newRating = Double.parseDouble(rating);
-    
         double updatedRating = Math.round(((currentRate + newRating) / 2.0) * 10.0) / 10.0;
-    
+       
+
         try (FileWriter writer = new FileWriter(ratesFilePath, true)) {
             writer.write(bikeID + "_" + updatedRating + "_" + desc + "\n");
         }
-    
+
         updateBikeRate(bikeID, updatedRating);
-    }
-   
-
-    private void updateBikeRate(String bikeID, double newRating) throws IOException {
-        double currentRate = getBikeRate(bikeID);
-        int numOfRatings = getNumberOfRatings(bikeID);
-
-        // Calculate new rate
-        double newRate = calculateNewRate(currentRate, numOfRatings, newRating);
-
-        // Update bike's rate in bikes.txt file
-        updateBikeRateInFile(bikeID, newRate);
     }
 
     private double getBikeRate(String bikeID) throws IOException {
         double currentRate = 0.0;
-        try (Scanner scanner = new Scanner(new File(ratesFilePath))) {
+        try (Scanner scanner = new Scanner(new File(bikesFilePath))) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] parts = line.split("_");
-
-                if (parts.length > 0 && parts[0].equals(bikeID)) {
-                    currentRate += Double.parseDouble(parts[1]);
+                if (parts.length >= 3 && parts[0].equals(bikeID)) {
+                    currentRate = Double.parseDouble(parts[2]);
+                    break;
                 }
             }
         }
         return currentRate;
     }
 
-    private int getNumberOfRatings(String bikeID) throws IOException {
-        int numOfRatings = 0;
-        try (Scanner scanner = new Scanner(new File(ratesFilePath))) {
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                String[] parts = line.split("_");
-
-                if (parts.length > 0 && parts[0].equals(bikeID)) {
-                    numOfRatings++;
-                }
-            }
-        }
-        return numOfRatings;
-    }
-    
-    private double calculateNewRate(double currentRate, int numOfRatings, double newRating) {
-        return  Math.round(((newRating) / 2.0) * 10.0) / 10.0;
-    }
-    
-    private void updateBikeRateInFile(String bikeID, double newRate) throws IOException {
+    private void updateBikeRate(String bikeID, double newRating) throws IOException {
         List<String> lines = new ArrayList<>();
         try (Scanner scanner = new Scanner(new File(bikesFilePath))) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] parts = line.split("_");
                 if (parts.length >= 3 && parts[0].equals(bikeID)) {
-                    parts[2] = String.valueOf(newRate);
+                    parts[2] = String.valueOf(newRating);
                     line = String.join("_", parts);
                 }
                 lines.add(line);

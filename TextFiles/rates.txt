@@ -1,8 +1,0 @@
-111_2_Testing
-101_2_Testing 2
-102_2.0_Testing 3
-101_2.0_Rate
-101_3.0_Testing 11
-101_5.0_Testing 
-102_2.5_Testing
-101_7.3_Test

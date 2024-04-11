@@ -14,6 +14,7 @@ public class MainPageAdmin extends JFrame {
     private JPanel buttonsPanel;
     private JButton viewUsersButton;
     private JButton deleteUsersButton;
+    private JButton viewReportsButton;
     private JButton logoutButton;
     private JPanel imgPanel;
 
@@ -55,6 +56,7 @@ public class MainPageAdmin extends JFrame {
         buttonsPanel.setBackground(new Color(51, 102, 153));
 
         viewUsersButton = new JButton("VIEW USERS");
+        viewReportsButton = new JButton("VIEW REPORTS");
         deleteUsersButton = new JButton("DELETE USERS");
         logoutButton = new JButton("LOGOUT");
 
@@ -63,22 +65,28 @@ public class MainPageAdmin extends JFrame {
         viewUsersButton.setForeground(Color.WHITE);
         deleteUsersButton.setBackground(new Color(51, 153, 102));
         deleteUsersButton.setForeground(Color.WHITE);
+        viewReportsButton.setBackground(new Color(51, 153, 102));
+        viewReportsButton.setForeground(Color.WHITE);
         logoutButton.setBackground(new Color(51, 153, 102));
         logoutButton.setForeground(Color.WHITE);
 
         viewUsersButton.setPreferredSize(new Dimension(200, 45));
         deleteUsersButton.setPreferredSize(new Dimension(200, 45));
+        viewReportsButton.setPreferredSize(new Dimension(200, 45));
         logoutButton.setPreferredSize(new Dimension(200, 45));
 
         buttonsPanel.add(viewUsersButton);
         buttonsPanel.add(deleteUsersButton);
+        buttonsPanel.add(viewReportsButton);
         buttonsPanel.add(logoutButton);
+        
 
         mainPanel.add(buttonsPanel, BorderLayout.CENTER);
 
         // Button listeners
         viewUsersButton.addActionListener(new ViewUserListener());
         deleteUsersButton.addActionListener(new DeleteListener());
+        viewReportsButton.addActionListener(new ViewRepotListener());
         logoutButton.addActionListener(new LogoutAdminListener());
 
         setVisible(true);
@@ -92,6 +100,12 @@ public class MainPageAdmin extends JFrame {
             } catch (NullPointerException nulP) {
                 // Handle NullPointerException if needed
             }
+        }
+    }
+
+    private class ViewRepotListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            // Delete user logic
         }
     }
 

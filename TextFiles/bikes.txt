@@ -1,5 +1,5 @@
-101_SciTech_1.3_Good_Available_10.00_5.00
-102_Humanities_1.5_Average_Available_8.00_4.50
+101_SciTech_4.8_Good_Available_10.00_5.00
+102_Humanities_4.0_Average_Available_8.00_4.50
 103_MED_4.2_Good_NotAvailable_9.50_5.50
 104_ScoSci_4.0_Good_Available_9.00_5.20
 105_Backgate_3.5_Average_NotAvailable_7.50_4.00
@@ -8,7 +8,7 @@
 108_Humanities_4.0_Good_NotAvailable_9.50_5.50
 109_MED_4.5_Excellent_NotAvailable_11.50_6.20
 110_ScoSci_3.5_Average_NotAvailable_8.00_4.50
-111_Backgate_2.0_Good_Available_10.50_5.80
+111_Backgate_4.0_Good_Available_10.50_5.80
 112_StudentUnion_4.6_Excellent_Available_11.50_6.30
 113_SciTech_4.3_Good_Available_10.50_5.50
 114_Humanities_3.5_Average_Available_7.50_4.20
