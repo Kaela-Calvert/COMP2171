@@ -31,7 +31,7 @@ public class ViewUsers extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        viewData(); // Setup JTable with data
+        viewData(); 
 
         buttonPanel.setLayout(new FlowLayout());
         buttonPanel.add(logoutButton);
@@ -82,7 +82,6 @@ public class ViewUsers extends JFrame {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    // Define HeaderRenderer as an inner class or standalone class if you prefer
     private class HeaderRenderer implements TableCellRenderer {
     private final TableCellRenderer renderer;
 
@@ -95,10 +94,10 @@ public class ViewUsers extends JFrame {
             JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         JLabel label = (JLabel) renderer.getTableCellRendererComponent(
             table, value, isSelected, hasFocus, row, column);
-        label.setHorizontalAlignment(SwingConstants.CENTER); // Center text
-        label.setForeground(new Color(0, 0, 128)); // Navy blue color
-        label.setBackground(new Color(51, 153, 102)); // Dark green background
-        label.setFont(label.getFont().deriveFont(Font.BOLD)); // Set font to bold
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setForeground(new Color(0, 0, 128)); 
+        label.setBackground(new Color(51, 153, 102)); 
+        label.setFont(label.getFont().deriveFont(Font.BOLD)); 
         return label;
         }
     }
@@ -106,7 +105,7 @@ public class ViewUsers extends JFrame {
     private class LogoutListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             dispose();
-            LoginUI login = new LoginUI(); // Assume this opens the login window
+            LoginUI login = new LoginUI(); 
             login.setVisible(true);
         }
     }
@@ -140,7 +139,6 @@ public class ViewUsers extends JFrame {
 
         if (!tempFile.renameTo(inputFile)) {
             System.out.println("Could not delete user");
-            // Handle failure to rename file
         }
     }
 
