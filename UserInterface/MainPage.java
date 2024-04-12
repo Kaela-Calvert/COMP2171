@@ -167,6 +167,7 @@ private class SelectBikeListener implements ActionListener {
     private class LogoutListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             dispose(); // Close the current window
+            LoginUI login = new LoginUI();
         }
     }
 

@@ -112,7 +112,9 @@ public class MainPageAdmin extends JFrame {
     private class LogoutAdminListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             dispose();
-            LoginUI login = new LoginUI();
+            SwingUtilities.invokeLater(() -> {
+                new LoginUI().setVisible(true);
+            });
         }
     }
 

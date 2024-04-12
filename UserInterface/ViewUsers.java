@@ -4,11 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
 import javax.swing.table.*;
-import java.util.Vector;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
-
+import Controllers.ViewUsersController;
 
 public class ViewUsers extends JFrame {
     private JTable usersTable;
@@ -17,6 +16,7 @@ public class ViewUsers extends JFrame {
     private JButton returnMainButton = new JButton("RETURN");
     private JButton deleteButton = new JButton("DELETE");
     private JPanel buttonPanel = new JPanel();
+    private ViewUsersController viewUsersController;
 
     public ViewUsers() {
         try {
@@ -31,7 +31,8 @@ public class ViewUsers extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        viewData(); 
+        viewUsersController = new ViewUsersController();
+        viewData();
 
         buttonPanel.setLayout(new FlowLayout());
         buttonPanel.add(logoutButton);
@@ -48,64 +49,53 @@ public class ViewUsers extends JFrame {
         returnMainButton.setForeground(Color.WHITE);
         deleteButton.setBackground(new Color(51, 153, 102));
         deleteButton.setForeground(Color.WHITE);
-        
 
         add(buttonPanel, BorderLayout.SOUTH);
         setVisible(true);
     }
 
     public void viewData() {
-        String[] columnNames = {"First Name", "Last Name", "ID", "Email", "Password"};
-        Vector<Vector<String>> rowData = new Vector<>();
-    
-        try (BufferedReader reader = new BufferedReader(new FileReader("/Users/joeldixon/Downloads/COMP2171-main-2/TextFiles/userdata.txt"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] data = line.split(" ");
-                Vector<String> row = new Vector<>();
-                for (String value : data) {
-                    row.add(value);
-                }
-                rowData.add(row);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Failed to load data due to an unexpected error:\n" + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    
-        DefaultTableModel model = new DefaultTableModel(rowData, new Vector<>(java.util.Arrays.asList(columnNames)));
+        String[] columnNames = {"First Name", "Last Name", "ID", "Email"};
+        List<List<String>> rowData = viewUsersController.loadUserData();
+
+        DefaultTableModel model = new DefaultTableModel(new Object[0][0], columnNames);
         usersTable = new JTable(model);
         usersTable.getTableHeader().setDefaultRenderer(new HeaderRenderer(usersTable));
+
+        for (List<String> row : rowData) {
+            model.addRow(row.subList(0, 4).toArray());
+        }
+
         scrollPane = new JScrollPane(usersTable);
         usersTable.setFillsViewportHeight(true);
-    
+
         add(scrollPane, BorderLayout.CENTER);
     }
 
     private class HeaderRenderer implements TableCellRenderer {
-    private final TableCellRenderer renderer;
+        private final TableCellRenderer renderer;
 
-    public HeaderRenderer(JTable table) {
-        renderer = table.getTableHeader().getDefaultRenderer();
-    }
+        public HeaderRenderer(JTable table) {
+            renderer = table.getTableHeader().getDefaultRenderer();
+        }
 
-    @Override
-    public Component getTableCellRendererComponent(
-            JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        JLabel label = (JLabel) renderer.getTableCellRendererComponent(
-            table, value, isSelected, hasFocus, row, column);
-        label.setHorizontalAlignment(SwingConstants.CENTER);
-        label.setForeground(new Color(0, 0, 128)); 
-        label.setBackground(new Color(51, 153, 102)); 
-        label.setFont(label.getFont().deriveFont(Font.BOLD)); 
-        return label;
+        @Override
+        public Component getTableCellRendererComponent(
+                JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            JLabel label = (JLabel) renderer.getTableCellRendererComponent(
+                    table, value, isSelected, hasFocus, row, column);
+            label.setHorizontalAlignment(SwingConstants.CENTER);
+            label.setForeground(new Color(0, 0, 128));
+            label.setBackground(new Color(51, 153, 102));
+            label.setFont(label.getFont().deriveFont(Font.BOLD));
+            return label;
         }
     }
 
     private class LogoutListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             dispose();
-            LoginUI login = new LoginUI(); 
+            LoginUI login = new LoginUI();
             login.setVisible(true);
         }
     }
@@ -118,35 +108,11 @@ public class ViewUsers extends JFrame {
         }
     }
 
-    private void deleteUserFromFile(int rowIndex) {
-        File inputFile = new File("/Users/joeldixon/Downloads/COMP2171-main-2/TextFiles/userdata.txt");
-        File tempFile = new File(inputFile.getAbsolutePath() + ".tmp");
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
-
-            String currentLine;
-            int currentRowIndex = 0;
-            while ((currentLine = reader.readLine()) != null) {
-                if (currentRowIndex != rowIndex) {
-                    writer.write(currentLine + System.lineSeparator());
-                }
-                currentRowIndex++;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (!tempFile.renameTo(inputFile)) {
-            System.out.println("Could not delete user");
-        }
-    }
-
     private class DeleteListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             int selectedRow = usersTable.getSelectedRow();
             if (selectedRow != -1) {
-                deleteUserFromFile(selectedRow);
+                viewUsersController.deleteUser(selectedRow);
                 ((DefaultTableModel) usersTable.getModel()).removeRow(selectedRow);
             }
         }
