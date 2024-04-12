@@ -80,7 +80,7 @@ public class MainPageAdmin extends JFrame {
 
         // Button listeners
         viewUsersButton.addActionListener(new ViewUserListener());
-        viewReportsButton.addActionListener(new ViewRepotListener());
+        viewReportsButton.addActionListener(new ViewIncidentReportListener());
         logoutButton.addActionListener(new LogoutAdminListener());
 
         setVisible(true);
@@ -97,9 +97,15 @@ public class MainPageAdmin extends JFrame {
         }
     }
 
-    private class ViewRepotListener implements ActionListener {
+    private class ViewIncidentReportListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            // Delete user logic
+            try {
+                dispose(); // Close the current window
+                ViewIncidentReports viewReports = new ViewIncidentReports(); // Create and display a new view for incident reports
+            } catch (Exception ex) {
+                // Handle any exceptions, possibly logging them or displaying an error message to the user
+                ex.printStackTrace();
+            }
         }
     }
 
