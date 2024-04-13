@@ -10,7 +10,6 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 public class LoginUI extends JFrame {
@@ -44,37 +43,38 @@ public class LoginUI extends JFrame {
         add(mainPanel, BorderLayout.CENTER);
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 1;
+        gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.anchor = GridBagConstraints.WEST;
         adminCheckBox.setForeground(new Color(51, 102, 153));
         adminCheckBox.setFont(new Font("Arial", Font.BOLD, 16));
         mainPanel.add(adminCheckBox, gbc);
 
+        gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.WEST;
         idLabel.setForeground(Color.WHITE);
         idLabel.setFont(new Font("Arial", Font.BOLD, 16));
         mainPanel.add(idLabel, gbc);
 
-        gbc.gridx = 2;
+        gbc.gridx = 1;
         idText.setBackground(new Color(240, 240, 240));
         idText.setFont(new Font("Arial", Font.PLAIN, 16));
         mainPanel.add(idText, gbc);
 
-        gbc.gridx = 1;
+        gbc.gridx = 0;
         gbc.gridy = 2;
         passwordLabel.setForeground(Color.WHITE);
         passwordLabel.setFont(new Font("Arial", Font.BOLD, 16));
         mainPanel.add(passwordLabel, gbc);
 
-        gbc.gridx = 2;
+        gbc.gridx = 1;
         passwordText.setBackground(new Color(240, 240, 240));
         passwordText.setFont(new Font("Arial", Font.PLAIN, 16));
         mainPanel.add(passwordText, gbc);
 
-        gbc.gridx = 1;
+        gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
@@ -95,7 +95,6 @@ public class LoginUI extends JFrame {
 
         backButton.addActionListener(new BackListener());
         loginButton.addActionListener(new LoginListener());
-        
 
         BufferedImage myPicture = null;
         try {
@@ -145,6 +144,9 @@ public class LoginUI extends JFrame {
 
     private class BackListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
+            // Reset the administrator checkbox state
+            adminCheckBox.setSelected(false);
+
             dispose();
             new WelcomeUI().setVisible(true);
         }

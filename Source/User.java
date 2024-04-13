@@ -18,9 +18,8 @@ public class User {
     }
 
     // Getters and setters for the fields
-
     public User() {
-        //TODO Auto-generated constructor stub
+        // TODO Auto-generated constructor stub
     }
 
     public String getfname() {
