@@ -120,6 +120,7 @@ public class RateBikeUI extends JFrame {
             if (success) {
                 JOptionPane.showMessageDialog(null, "Bike rated successfully.");
                 dispose();
+                MainPage main =new MainPage();
             } else {
                 JOptionPane.showMessageDialog(null, "Failed to rate bike. Please try again.");
             }

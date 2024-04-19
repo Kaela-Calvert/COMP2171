@@ -17,7 +17,7 @@
 117_Backgate_3.9_Good_Available_8.50_4.70
 118_StudentUnion_4.9_Excellent_Available_12.50_6.80
 119_SciTech_4.6_Excellent_Available_11.00_6.00
-120_Humanities_4.2_Good_Available_10.00_5.50
+120_Humanities_4.3_Good_NotAvailable_10.00_5.50
 121_ScoSci_3.8_Average_Available_9.50_5.20
 122_Backgate_4.0_Good_Available_10.00_5.50
 123_StudentUnion_4.3_Good_Available_10.50_5.80

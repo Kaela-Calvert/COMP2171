@@ -73,10 +73,10 @@ public class BikeListUI {
                                     JOptionPane.showMessageDialog(null, "Current bike unlinked successfully.");
                                 } else {
                                     JOptionPane.showMessageDialog(null, "Failed to unlink the current bike.", "Error", JOptionPane.ERROR_MESSAGE);
-                                    return; // Exit the action listener if unlink failed
+                                    SwingUtilities.invokeLater(() -> new BikeListUI(stationName, parentFrame));
                                 }
                             } else {
-                                return; // Exit the action listener if the user doesn't want to unlink
+                                SwingUtilities.invokeLater(() -> new BikeListUI(stationName, parentFrame));
                             }
                         }
         
@@ -111,7 +111,8 @@ public class BikeListUI {
                                             JOptionPane.showMessageDialog(null, "Bike linked successfully.");
                                             loadBikesIntoTable(); // Refresh the table after linking
                                         } else {
-                                            JOptionPane.showMessageDialog(null, "Failed to link bike.", "Error", JOptionPane.ERROR_MESSAGE);
+                                            JOptionPane.showMessageDialog(null, "Bike Unavailable....Failed to link bike.", "Error", JOptionPane.ERROR_MESSAGE);
+                                            SwingUtilities.invokeLater(() -> new BikeListUI(stationName, parentFrame));
                                         }
                                     } catch (NumberFormatException ex) {
                                         JOptionPane.showMessageDialog(null, "Invalid rental duration. Please enter an integer.", "Error", JOptionPane.ERROR_MESSAGE);

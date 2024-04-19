@@ -1,7 +1,6 @@
 package UserInterface;
 
 import Controllers.CostController;
-import Controllers.UserController;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -32,7 +31,6 @@ public class RentalInvoiceUI extends JFrame {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
 
-        UserController userController = new UserController();
         // String userName = userController.getUserName(userId);
 
         JLabel userLabel = new JLabel("User: " + userId);
